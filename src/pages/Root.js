@@ -1,8 +1,17 @@
-import { Outlet, Link } from "react-router-dom";
-import { useState } from 'react';
+import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from 'react';
 
 export default function Root() {
     const [token, setToken] = useState(localStorage.getItem('token'));
+    const navigate = useNavigate();
+    const location = useLocation();
+    const page = location.pathname;
+
+    useEffect(() => {    
+        if (page === "/") {
+            navigate("/home");
+        }
+    }, []);
 
     function logout() {
         localStorage.removeItem('token');
@@ -14,20 +23,28 @@ export default function Root() {
             <header>
                 <nav>
                     <ul>
-                            <Link to="activities">Activities</Link>
-                            <Link to="routines">Routines</Link>
                         {
-                            token && <>
-                                <Link to="myroutines">My Routines</Link>
-                                <Link className ="lastNav" onClick={logout} to="/">Logout</Link>
-                            </>
+                            page !== "/home" && <Link to="home">Home</Link>
                         }
                         {
-                            !token && <>
-                                <Link to="register">Register</Link>
-                                <Link className="lastNav" to="login">Login</Link>
-                            </>
+                            page !== "/activities" && <Link to="activities">Activities</Link>
                         }
+                        {
+                            page !== "/routines" && <Link to="routines">Routines</Link>
+                        }
+                        {
+                            token && page !== "/myroutines" && <Link to="myroutines">My Routines</Link>
+                        }
+                        {
+                            token && <Link onClick={logout} to="/home">Logout</Link>
+                        }
+                        {
+                            !token && page !== "/register" && <Link to="register">Register</Link>
+                        }
+                        {
+                            !token && page !== "/login" && <Link to="login">Login</Link>
+                        }
+                        
                     </ul>
                 </nav>
                 <section className="logo">

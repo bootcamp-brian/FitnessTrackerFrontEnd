@@ -7,10 +7,8 @@ export const registerUser = async ({ username, password }) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          user: {
             username: `${username}`,
             password: `${password}`
-          }
         })
     });
     const data = await response.json();
@@ -24,10 +22,8 @@ export const loginUser = async ({ username, password }) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          user: {
             username: `${username}`,
             password: `${password}`
-          }
         })
     });
     const data = await response.json();
@@ -54,13 +50,14 @@ export const getRoutinesByUser = async ({username, token = null}) => {
             'Authorization': `Bearer ${token}`
             },
         });
-    } else {
-        const response = await fetch(`${BASE_URL}/users/${username}/routines`, {
-            headers: {
-            'Content-Type': 'application/json'
-            },
-        });
+        const data = await response.json();
+        return data;
     }
+    const response = await fetch(`${BASE_URL}/users/${username}/routines`, {
+        headers: {
+        'Content-Type': 'application/json'
+        },
+    });
     const data = await response.json();
     return data;
 }

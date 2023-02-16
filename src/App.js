@@ -3,9 +3,13 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import './App.css';
+import NotFound from "./NotFound";
 import Activities from "./pages/Activities";
 import Home from "./pages/Home";
+import Login from "./pages/Login";
 import MyRoutines from "./pages/MyRoutines";
+import Register from "./pages/Register";
+import Root from "./pages/Root";
 import Routines from "./pages/Routines";
 
 const router = createBrowserRouter([
@@ -35,7 +39,7 @@ const router = createBrowserRouter([
             element: <Register />,
           },
           {
-            path: "/",
+            path: "home",
             element: <Home />,
           },
         ],
