@@ -25,7 +25,6 @@ const Login = () => {
                 setUsername('');
                 setPassword('');
                 setErrorMessage('');
-                // navigate("/posts");
             } else {
                 setErrorMessage(data.message);
             }

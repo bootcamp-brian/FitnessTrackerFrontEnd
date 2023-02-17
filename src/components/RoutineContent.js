@@ -1,14 +1,11 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-
 const RoutineContent = ({ routine }) => {
     const { name, goal, creatorName, activities } = routine;
 
     return <>
-        <p>{name}</p>
-        <p>{creatorName}</p>
-        <p>{goal}</p>
-        <ul>
+        <p className="routineName">{name}</p>
+        <p className="routineCreator">{creatorName}</p>
+        <p className="routineGoal">{goal}</p>
+        <ul className="routineActivities">
             {
                 activities.map(activity => {
                     return <li key={activity.id} className="routineActivities">

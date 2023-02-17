@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import { getRoutines } from '../utils/API';
 import RoutineContent from '../components/RoutineContent';
+import RoutineHeaders from '../components/RoutineHeaders';
 
 const Routines = () => {
     const [routines, setRoutines] = useState([]);
@@ -20,18 +21,20 @@ const Routines = () => {
     // const filteredPosts = posts.filter(post => postMatches(post, searchTerm));
     // const postsToDisplay = searchTerm.length ? filteredPosts : posts;
     
+    const renderRoutines = async () => {
+        const newRoutines = await getRoutines();
+        setRoutines(newRoutines);
+    }
+    
     useEffect(() => {
-        const renderRoutines = async () => {
-            const newRoutines = await getRoutines();
-            setRoutines(newRoutines);
-        }
         renderRoutines();
-    }, [routines])
+    }, [])
 
     return <div className="page">
         <h2>Routines</h2>
         {/* <SearchPosts token={token} searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> */}
-        <section className="posts">
+        <section className="routines">
+            <RoutineHeaders />
             {
                 routines.map(routine => {
                     return <div key={routine.id} className="routine">

@@ -27,7 +27,6 @@ const Register = () => {
                 setPassword('');
                 setPasswordConfirm('');
                 setErrorMessage('');
-                // navigate("/posts");
             } else {
                 setErrorMessage(data.message);
             }

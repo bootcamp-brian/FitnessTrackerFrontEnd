@@ -42,20 +42,11 @@ export const getUser = async (token) => {
 }
 
 // not sure if this will work the way I want yet
-export const getRoutinesByUser = async ({username, token = null}) => {
-    if (token) {
-        const response = await fetch(`${BASE_URL}/users/${username}/routines`, {
-            headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-            },
-        });
-        const data = await response.json();
-        return data;
-    }
+export const getRoutinesByUser = async (username, token) => {
     const response = await fetch(`${BASE_URL}/users/${username}/routines`, {
         headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
         },
     });
     const data = await response.json();
@@ -124,7 +115,7 @@ export const getRoutines = async () => {
     return data;
 }
 
-export const createRoutine = async ({ name, goal, token }) => {
+export const createRoutine = async (name, goal, token, isPublic) => {
     const response = await fetch(`${BASE_URL}/routines`, {
         method: "POST",
         headers: {
@@ -134,14 +125,14 @@ export const createRoutine = async ({ name, goal, token }) => {
         body: JSON.stringify({
             name: `${name}`,
             goal: `${goal}`,
-            isPublic: true
+            isPublic: isPublic
         })
     });
     const data = await response.json();
     return data;
 }
 
-export const editRoutine = async ({ name, goal, isPublic, token, id }) => {
+export const editRoutine = async (name, goal, isPublic, token, id) => {
     const response = await fetch(`${BASE_URL}/routines/${id}`, {
         method: "PATCH",
         headers: {
@@ -199,7 +190,7 @@ export const editRoutineActivity = async ({ count, duration, token, id}) => {
     return data;
 }
 
-export const deleteRoutineActivity = async ({ token, id }) => {
+export const deleteRoutineActivity = async (token, id) => {
     const response = await fetch(`${BASE_URL}/routine_activities/${id}`, {
         method: "DELETE",
         headers: {
