@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import { deleteRoutineActivity, editRoutine, getActivities } from "../utils/API";
+import { attachActivity, deleteRoutineActivity, editRoutine, editRoutineActivity, getActivities } from "../utils/API";
 
-const EditRoutineForm = ({ updated, setUpdated, token, routineToEdit, setEditEnabled }) => {
+const EditRoutineForm = ({ updated, setUpdated, token, routineToEdit, setRoutineToEdit }) => {
     const { name, goal, isPublic, activities, id: routineId } = routineToEdit;
     const [nameToEdit, setNameToEdit] = useState(name);
     const [goalToEdit, setGoalToEdit] = useState(goal);
     const [isPublicToEdit, setIsPublicToEdit] = useState(isPublic);
-    const [activitiesToEdit, setActivitiesToEdit] = useState(activities);
+    const [activitiesToEdit, setActivitiesToEdit] = useState([...activities]);
     const [activitiesList, setActivitiesList] = useState([]);
 
     useEffect(() => {
+        console.log('test')
         const getActivitiesList = async () => {
             const allActivities = await getActivities();
             const availableActivities = allActivities.filter(activity => {
@@ -23,29 +24,61 @@ const EditRoutineForm = ({ updated, setUpdated, token, routineToEdit, setEditEna
             setActivitiesList(availableActivities);
         }
         getActivitiesList();
-    }, [activitiesList, activitiesToEdit])
+    }, [updated])
 
     return <>
         <h2>Edit Routine</h2>
-        <form className="createRoutine" onSubmit={event => {
+        <form className="editRoutine" onSubmit={async (event) => {
             event.preventDefault();
-            // editRoutine(nameToEdit, goalToEdit, isPublicToEdit, token, routineId);
 
-            const activitiesToRemove = activities.filter(activity => {
-                if (!activitiesToEdit.includes(activity)) {
-                    return true;
-                }
-            })
-            
-            activitiesToRemove.forEach(activity => {
-                deleteRoutineActivity(token, activity.routineActivityId);
-            });
-            // work on this next
-            // const activitiesToUpdate = 
+            const submitEdits = async () => {
+                const activitiesToRemove = activities.filter(activity => {
+                // in case .includes doesn't work
+                // activitiesToEdit.forEach(submittedActivity => {
+                //     if (submittedActivity.name === activity.name) {
+                //         return false;
+                //     }
+                // })
+                // return true;
+                    if (!activitiesToEdit.includes(activity)) {
+                        return true;
+                    }
+                })
+                
+                activitiesToRemove.forEach(async (activity) => {
+                    await deleteRoutineActivity(token, activity.routineActivityId);
+                });
 
-            // const activitiesToAdd = 
-            // setRoutines(routines);
-            // setEditEnabled(false);
+                const activitiesToAdd = activitiesToEdit.filter(activity => {
+                    if (!activities.includes(activity)) {
+                        return true;
+                    }
+                })
+
+                activitiesToAdd.forEach(async (activity) => {
+                    const count = Number(activity.count);
+                    const duration = Number(activity.duration);
+                    const id = Number(activity.id);
+                    await attachActivity(id, count, duration, routineId);
+                });
+
+                const activitiesToUpdate = activities.filter(activity => {
+                    if (activitiesToEdit.includes(activity)) {
+                        return true;
+                    }
+                })
+
+                activitiesToUpdate.forEach(async (activity) => {
+                    const { count, duration, routineActivityId } = activity;
+                    await editRoutineActivity(count, duration, token, routineActivityId);
+                });
+
+                await editRoutine(nameToEdit, goalToEdit, isPublicToEdit, token, routineId);
+            }
+
+            await submitEdits();
+            setRoutineToEdit(null);
+            setUpdated(updated + 1);
         }}>
             <section>
                 <label htmlFor="routineName">Name:</label>
@@ -92,6 +125,7 @@ const EditRoutineForm = ({ updated, setUpdated, token, routineToEdit, setEditEna
                         const activityToAdd = activitiesList.filter(activity => activity.name === activityName);
                         const newActivitiesToEdit = [...activitiesToEdit, activityToAdd[0]];
                         setActivitiesToEdit(newActivitiesToEdit);
+                        setUpdated(updated + 1);
                     }}>
                     <option value="activities">Activities to add</option>
                     {
@@ -110,7 +144,10 @@ const EditRoutineForm = ({ updated, setUpdated, token, routineToEdit, setEditEna
                                 placeholder="enter activity count..."
                                 required
                                 value={activity.count}
-                                onChange={event => {activity.count = event.target.value}}
+                                onChange={event => {
+                                    activity.count = event.target.value;
+                                    setUpdated(updated + 1);
+                                }}
                             />
                             <label htmlFor="activityDuration">Duration:</label>
                             <input
@@ -119,12 +156,16 @@ const EditRoutineForm = ({ updated, setUpdated, token, routineToEdit, setEditEna
                                 placeholder="enter activity duration..."
                                 required
                                 value={activity.duration}
-                                onChange={event => {activity.duration = event.target.value}}
+                                onChange={event => {
+                                    activity.duration = event.target.value;
+                                    setUpdated(updated + 1)
+                                }}
                             />
                             <button type="button" data-id={activity.id} onClick={event => {
                                 const id = Number(event.target.getAttribute('data-id'));
                                 const newActivities = activitiesToEdit.filter(activity => activity.id !== id);
                                 setActivitiesToEdit(newActivities);
+                                setUpdated(updated + 1);
                             }}>Remove</button>
                         </div>
                     })

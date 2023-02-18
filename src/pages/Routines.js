@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
 import { getRoutines } from '../utils/API';
 import RoutineContent from '../components/RoutineContent';
 import RoutineHeaders from '../components/RoutineHeaders';
@@ -8,7 +7,6 @@ import RoutineHeaders from '../components/RoutineHeaders';
 const Routines = () => {
     const [routines, setRoutines] = useState([]);
     const [token] = useOutletContext();
-    const { username } = token ? jwt_decode(token) : '';
 
     // function postMatches(post, text) {
     //     if (post.title.includes(text) || post.description.includes(text) || post.price.includes(text)) {

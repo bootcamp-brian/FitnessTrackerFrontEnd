@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
-import { getRoutinesByUser } from '../utils/API';
+import { deleteRoutine, getRoutinesByUser } from '../utils/API';
 import RoutineContent from '../components/RoutineContent';
 import CreateRoutineForm from '../components/CreateRoutineForm';
 import RoutineHeaders from '../components/RoutineHeaders';
@@ -33,7 +33,6 @@ const MyRoutines = () => {
     }
 
     useEffect(() => {
-        console.log('test')
         if (!token) {
             navigate('/home');
         }
@@ -59,8 +58,13 @@ const MyRoutines = () => {
                             const routine = routines.filter(routine => routine.id === id);
                             setRoutineToEdit(routine[0]);
                         }}>Edit</button>
-                    </div>}
-                )
+                        <button type="button" data-id={routine.id} onClick={async (event) => {
+                            const routineId = Number(event.target.getAttribute('data-id'));
+                            await deleteRoutine(token, routineId);
+                            setUpdated(updated + 1);
+                        }}>Delete</button>
+                    </div>
+                })
             }
         </section>
     </div>

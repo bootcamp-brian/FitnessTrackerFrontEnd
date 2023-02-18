@@ -43,14 +43,24 @@ export const getUser = async (token) => {
 
 // not sure if this will work the way I want yet
 export const getRoutinesByUser = async (username, token) => {
-    const response = await fetch(`${BASE_URL}/users/${username}/routines`, {
-        headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-        },
-    });
-    const data = await response.json();
-    return data;
+    if (token) {
+        const response = await fetch(`${BASE_URL}/users/${username}/routines`, {
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+            },
+        });
+        const data = await response.json();
+        return data;
+    } else {
+        const response = await fetch(`${BASE_URL}/users/${username}/routines`, {
+            headers: {
+            'Content-Type': 'application/json'
+            },
+        });
+        const data = await response.json();
+        return data;
+    }
 }
 
 export const getActivities = async () => {
@@ -63,7 +73,7 @@ export const getActivities = async () => {
     return data;
 }
 
-export const createActivity = async ({ name, description, token }) => {
+export const createActivity = async (name, description, token) => {
     const response = await fetch(`${BASE_URL}/activities`, {
         method: "POST",
         headers: {
@@ -79,24 +89,39 @@ export const createActivity = async ({ name, description, token }) => {
     return data;
 }
 
-export const editActivity = async ({ name, description, token, id }) => {
-    const response = await fetch(`${BASE_URL}/activities/${id}`, {
-        method: "PATCH",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-            name: `${name}`,
-            description: `${description}`
-        })
-    });
-    const data = await response.json();
-    return data;
+export const editActivity = async (name, description, token, activityId) => {
+    if (name) {
+        const response = await fetch(`${BASE_URL}/activities/${activityId}`, {
+            method: "PATCH",
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                name: `${name}`,
+                description: `${description}`
+            })
+        });
+        const data = await response.json();
+        return data;    
+    } else {
+        const response = await fetch(`${BASE_URL}/activities/${activityId}`, {
+            method: "PATCH",
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                description: `${description}`
+            })
+        });
+        const data = await response.json();
+        return data;    
+    }
 }
 
-export const getRoutinesByActivity = async (id) => {
-    const response = await fetch(`${BASE_URL}/activities/${id}/routines`, {
+export const getRoutinesByActivity = async (activityId) => {
+    const response = await fetch(`${BASE_URL}/activities/${activityId}/routines`, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -149,8 +174,8 @@ export const editRoutine = async (name, goal, isPublic, token, id) => {
     return data;
 }
 
-export const deleteRoutine = async ({ token, id }) => {
-    const response = await fetch(`${BASE_URL}/routines/${id}`, {
+export const deleteRoutine = async (token, routineId) => {
+    const response = await fetch(`${BASE_URL}/routines/${routineId}`, {
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json',
@@ -161,21 +186,24 @@ export const deleteRoutine = async ({ token, id }) => {
     return data;
 }
 
-export const attachActivity = async ({ activityId, count, duration, id }) => {
-    const response = await fetch(`${BASE_URL}/routines/${id}/activities`, {
+export const attachActivity = async (activityId, count, duration, routineId) => {
+    const response = await fetch(`${BASE_URL}/routines/${routineId}/activities`, {
         method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
             activityId: activityId,
             count: count,
             duration: duration
         })
-    })
+    });
     const data = await response.json();
     return data;
 }
 
-export const editRoutineActivity = async ({ count, duration, token, id}) => {
-    const response = await fetch(`${BASE_URL}/routine_activities/${id}`, {
+export const editRoutineActivity = async (count, duration, token, routineActivityId) => {
+    const response = await fetch(`${BASE_URL}/routine_activities/${routineActivityId}`, {
         method: "PATCH",
         headers: {
           'Content-Type': 'application/json',

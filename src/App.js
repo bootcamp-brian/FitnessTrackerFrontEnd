@@ -11,6 +11,8 @@ import MyRoutines from "./pages/MyRoutines";
 import Register from "./pages/Register";
 import Root from "./pages/Root";
 import Routines from "./pages/Routines";
+import RoutinesByActivity from "./pages/RoutinesByActivity";
+import RoutinesByUser from "./pages/RoutinesByUser";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,14 @@ const router = createBrowserRouter([
           {
             path: "myroutines",
             element: <MyRoutines />,
+          },
+          {
+            path: "routinesbyuser/:username",
+            element: <RoutinesByUser />,
+          },
+          {
+            path: "routinesbyactivity/:activityId/:activityName",
+            element: <RoutinesByActivity />,
           },
           {
             path: "login",
