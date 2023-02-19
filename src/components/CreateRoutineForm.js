@@ -1,26 +1,30 @@
 import { useState } from "react";
 import { createRoutine } from "../utils/API";
 
-const CreateRoutineForm = ({ updated, setUpdated, token }) => {
+const CreateRoutineForm = ({ updated, setUpdated, token, setFormEnabled, setLoading }) => {
     const [nameToCreate, setNameToCreate] = useState('');
     const [goalToCreate, setGoalToCreate] = useState('');
     const [isPublicToCreate, setIsPubhlicToCreate] = useState(false);
+    const [message, setMessage] = useState('');
 
     return <>
-        <h2>Create New Routine</h2>
-        <form className="createRoutine" onSubmit={async (event) => {
+        <form className="forms" onSubmit={async (event) => {
             event.preventDefault();
+            setLoading(true);
             const response = await createRoutine(nameToCreate, goalToCreate, token, isPublicToCreate);
 
             if (response.error) {
-                console.log(response.message)
+                setMessage(response.message + ", there may already be a routine with that name.");
+                setLoading(false);
             } else {
                 setNameToCreate('');
                 setGoalToCreate('');
                 setIsPubhlicToCreate(false);
+                setFormEnabled(false);
                 setUpdated(updated + 1);
             }
         }}>
+            <h2>Create New Routine</h2>
             <section>
                 <label htmlFor="routineName">Name:</label>
                 <br/>
@@ -36,17 +40,19 @@ const CreateRoutineForm = ({ updated, setUpdated, token }) => {
             <section>
                 <label htmlFor="routineGoal">Goal:</label>
                 <br/>
-                <input
+                <textarea
                     id="routineGoal"
-                    type="text"
+                    rows="5"
+                    cols="25"
                     placeholder="enter routine goal..."
+                    maxLength="125"
                     required
                     value={goalToCreate}
                     onChange={event => setGoalToCreate(event.target.value)}
                 />
             </section>
-            <section>
-                <label htmlFor="isPublic">Public Routine</label>
+            <section className="publicOption">
+                <label htmlFor="isPublic">Public</label>
                 <br/>
                 <input
                     id="isPublic"
@@ -55,7 +61,14 @@ const CreateRoutineForm = ({ updated, setUpdated, token }) => {
                     onChange={() => isPublicToCreate ? setIsPubhlicToCreate(false) : setIsPubhlicToCreate(true)}
                 />
             </section>
-            <button type="submit">Submit Routine</button>
+            <section className="formButtons">
+                <button type="submit" className="submitButton">Submit Routine</button>
+                <button type="button" className="cancelButton" onClick={() => {
+                    setFormEnabled(false);
+                    setUpdated(updated + 1);
+                }}>Cancel</button>
+            </section>
+            <p className="errorMessage">{message}</p>
         </form>
     </>
 }

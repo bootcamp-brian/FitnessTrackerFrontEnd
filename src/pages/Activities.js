@@ -4,27 +4,27 @@ import { getActivities } from '../utils/API';
 import ActivityContent from '../components/ActivityContent';
 import CreateActivityForm from '../components/CreateActivityForm';
 import EditActivityForm from '../components/EditActivityForm';
+import Loading from '../components/Loading';
 
 const Activities = () => {
     const [activities, setActivities] = useState([]);
     const [token] = useOutletContext();
     const [updated, setUpdated] = useState(0);
     const [activityToEdit, setActivityToEdit] = useState(null);
-
-    // function postMatches(post, text) {
-    //     if (post.title.includes(text) || post.description.includes(text) || post.price.includes(text)) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-      
-    // const filteredPosts = posts.filter(post => postMatches(post, searchTerm));
-    // const postsToDisplay = searchTerm.length ? filteredPosts : posts;
+    const [startIndex, setStartIndex] = useState(0);
+    const [endIndex, setEndIndex] = useState(8);
+    const [activitiesTotal, setActivitiesTotal] = useState(0)
+    const [formEnabled, setFormEnabled] = useState(false);
+    const [loading, setLoading] = useState(true);
     
     const renderActivities = async () => {
-        const newActivities = await getActivities();
-        setActivities(newActivities);
+        const allActivities = await getActivities();
+        setActivitiesTotal(allActivities.length);
+        const activitiesToDisplay = allActivities.reverse().slice(startIndex, endIndex);
+        setActivities(activitiesToDisplay);
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
     }
     
     useEffect(() => {
@@ -33,13 +33,20 @@ const Activities = () => {
 
     return <div className="page">
         {
-            token && activityToEdit && <EditActivityForm updated={updated} setUpdated={setUpdated} token={token} activityToEdit={activityToEdit} setActivityToEdit={setActivityToEdit} />
+            loading && <Loading />
         }
         {
-            token && <CreateActivityForm updated={updated} setUpdated={setUpdated} token={token} />
+            token && activityToEdit &&
+            <EditActivityForm
+                updated={updated}
+                setUpdated={setUpdated}
+                token={token}
+                activityToEdit={activityToEdit}
+                setActivityToEdit={setActivityToEdit}
+                setLoading={setLoading}
+            />
         }
         <h2>Activities</h2>
-        {/* <SearchPosts token={token} searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> */}
         <section className="activities">
             {
                 activities.map(activity => {
@@ -57,6 +64,50 @@ const Activities = () => {
                 })
             }
         </section>
+        <section className="navButtons">
+            {
+                startIndex !== 0 &&
+                <button
+                    type="button"
+                    className="prev"
+                    onClick={() => {
+                        setLoading(true);
+                        setStartIndex(startIndex - 8);
+                        setEndIndex(endIndex - 8);
+                        setUpdated(updated + 1);
+                    }}
+                >{'<<'} Prev</button>
+            }
+            {
+                activitiesTotal - endIndex > 0 &&
+                <button 
+                    type="button"
+                    className="next"
+                    onClick={() => {
+                        setLoading(true);
+                        setStartIndex(startIndex + 8);
+                        setEndIndex(endIndex + 8);
+                        setUpdated(updated + 1);
+                    }}
+                >Next {'>>'}</button>
+            }
+        </section>
+        {
+            token && <button type="button" className="createButton" onClick={() => {
+                setFormEnabled(true);
+                setUpdated(updated + 1);
+            }}>Create New Activity</button>
+        }
+        {
+            formEnabled &&
+            <CreateActivityForm
+                updated={updated}
+                setUpdated={setUpdated}
+                token={token}
+                setFormEnabled={setFormEnabled}
+                setLoading={setLoading}
+            />
+        }
     </div>
 
 }

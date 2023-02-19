@@ -8,9 +8,22 @@
 .App {
   height: 100vh;
   width: 100vw;
+  min-width: 1400px;
+  min-height: 1080px;
+  background-image: url('images/background.jpg');
+  background-size: cover;
+  opacity: 0.9;
 }
 
-/* Header */
+/* Root */
+
+header {
+  height: 7%;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
 header h1 {
   text-align: center;
@@ -18,7 +31,6 @@ header h1 {
 }
 
 header nav ul {
-  background: lightblue;
   display: flex;
   justify-content: right;
   align-items: center;
@@ -27,34 +39,61 @@ header nav ul {
 
 header nav ul a {
   padding: 10px 10px;
+  color: yellow;
+  font-family: 'Audiowide', cursive;
+  font-style: italic
 }
 
-a:visited {
-  color: blue;
+header nav ul a:visited {
+  color: yellow;
 }
 
 .logo {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid black;
 }
 
-.logo img{
-  width: 10%;
-  height: 10%
+.logo h1{
+  width: 100%;
+  height: 20%;
+  position: absolute;
+  top: 45%;
+  text-align: center;
+  font-size: 5em;
+  color: gold;
+  font-family: 'Audiowide', cursive;
+  font-style: italic;
+  text-shadow: 2px 2px black;
 }
 
-/* Page element to contain individul page contents */
+.welcome {
+  color: white;
+  font-size: 2em;
+  text-align: center;
+  text-shadow: 2px 2px black;
+}
+
+.welcome a {
+  color:yellow;
+}
+
+.fitnesstrackr {
+  font-family: 'Audiowide', cursive;
+  font-style: italic;
+  color: gold;
+}
 
 .page {
+  padding-bottom: 50px;
+  background: rgb(105, 10, 101);
   padding-top: 50px;
-  background: white;
+  height: 93%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  opacity: 0.8;
 }
 
 .page h1 {
@@ -63,123 +102,411 @@ a:visited {
 
 .page h2 {
   padding: 1%;
+  font-family: 'Audiowide', cursive;
+  font-size: 3em;
+  color: yellow;
+  text-decoration: underline;
+  text-shadow: 2px 2px black;
 }
 
 /* Login & Registration pages*/
 
 .register, .login {
-  background: lightgray;
-  height: 500px;
-  width: 500px;
+  background: lightskyblue;
+  border-radius: 25px;
+  height: 670px;
+  width: 550px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
   padding: 25px;
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 2.2em;
+}
+
+.register section, .login section {
+  width: 70%;
+  padding: 28px 0px;
+}
+
+.register section label, .login section label {
+  font-weight: bold
+}
+
+.register section input, .login section input {
+  width: 100%;
+  border-top: 1px solid black;
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 1em;
+}
+
+.register button, .login button {
+  width: 70%;
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 0.8em;
+  background: gold;
+  color: white;
+  text-shadow: 1px 1px black;
+  margin-top: 50px;
 }
 
 .register p, .login p {
   color: red;
 }
 
-/* Posts & Profile & Public Profile pages */
-
-.createRoutine {
-  background: pink;
-  padding: 1%;
-  width: 50%;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.createRoutine section {
-  width: 50%;
-  padding: 1%;
-}
-
-.createRoutine button {
-  height: 50%;
-  align-self: center;
-}
-
-#searchLabel {
-  padding-right: 5px;
-}
+/* Routines */
 
 .routines {
-  width: 100%;
-  height: 500px;
+  width: 1360px;
+  height: 940;
   display: flex;
-  flex-wrap: wrap;
 }
 
 .routine {
-  width: 100%;
-  padding: 1%;
-  border: 2px solid white;
-  background: lightgreen;
+  background-image: url('images/paper2.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 400px;
+  height: 600px;
+  margin: 25px;
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
+  padding-top: 20px;
+  font-family: 'Covered By Your Grace', cursive;
 }
 
-.routineName, .routineCreator {
-  width: 15%;
-  text-align: center;
-}
-
-.routineGoal, .routineActivities {
-  width: 30%;
-}
-
-.routineActivities li {
+.routine h2 {
   width: 100%;
-}
-
-.editRoutineButton {
-  width: 10%;
-  height: 50px;
-}
-.profileMessages {
-  width: 100%;
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-  padding: 1%;
+  font-size: 2em;
+  font-family: 'Covered By Your Grace', cursive;
+  color: black;
+  text-shadow: none;
 }
 
 .routine h3 {
+  font-family: 'Covered By Your Grace', cursive;
+  color: black;
+  text-shadow: none;
   text-decoration: underline;
+}
+
+.routineText {
+  font-family: 'Covered By Your Grace', cursive;
+  height: 475px;
+  width: 400px;
+}
+
+.routineButtons {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.routine button {
+  color: white;
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 1.2em;
+  text-shadow: 1px 1px black;
+}
+
+.routine .routineName {
+  width: 100%;
+  text-align: center;
+  font-size: 2em;
+  font-family: 'Covered By Your Grace', cursive;
+  color: black;
+  text-shadow: none;
+}
+
+.routineHeader {
+  padding-left: 70px;
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: 1.1em;
+}
+
+.routineGoal, .routineCreator, .routineActivities {
+  padding-left: 100px;
+  font-size: 1.1em;
+}
+
+.routine a {
+  color: blue;
+}
+
+.routine a:visited {
+  color: blue;
+}
+
+.navButtonsOnRoutine {
+  display: flex;
+  justify-content: center;
+}
+
+.navButtonsOnRoutine button {
+  background: transparent;
+  color: black;
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 1.3em;
+  font-weight: bold;
+  text-decoration: underline;
+  text-shadow: 2px 2px orangered;
+}
+
+/* Activities */
+
+.activities {
+  display: flex;
+  flex-wrap: wrap;
+  width: 1360px;
+  height: 680px;
+}
+
+.activities button {
+  position: relative;
+  bottom: 0;
+  right: 0;
+}
+.activity {
+  background-image: url('images/postit.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 20px;
+  height: 300px;
+  width: 300px;
+}
+
+.activityText {
+  padding: 0px 40px;
+  padding-top: 40px;
+  font-family: 'Covered By Your Grace', cursive;
+  height: 260px;
+  width: 300px;
+}
+
+.activity h4{
+  font-size: 1.6em;
+}
+
+.activity p {
+  font-size: 1.4em;
+}
+
+.activity a:visited {
+  color: blue;
+}
+
+.activity button {
+  background: green;
+  color: white;
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 1.2em;
+  text-shadow: 1px 1px black;
+}
+
+.navButtons button {
+  background: transparent;
+  color: white;
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 1.8em;
+  text-decoration: underline;
+  text-shadow: 1px 1px black;
+}
+
+/* Forms */
+
+.formFields {
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.forms fieldset {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 1.2em;
+  border-bottom: 1px solid black;
+}
+
+.routineFormActivity {
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.formActivitiesSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.formActivities {
+  width: 100%;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.formActivities div {
+  width: 49%;
+  padding: 5px 0px;
+  border-bottom: 1px solid black;
+}
+
+.formActivities div section{
+  width: 100%;
+  display: flex;
+  padding: 5px;
+}
+
+.formActivities div section input {
+  width: 10%;
+  margin: 0px 10px;
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 1.5em;
+  font-weight: bold;
   text-align: center;
 }
 
-/* .routine h3, .routine h4, .routine p {
-  padding: 5px 0px;
-} */
-
-.searchRoutines {
-  margin-bottom: 1%;
-  background: lightblue;
-  padding: 1%;
+.formActivities div section span {
+  margin-right: 10px;
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.removeActivityButton {
+  background: red;
+  height: auto;
+  width: auto;
+  color: white;
+  font-family: 'Audiowide', cursive;
+  font-size: 1.2em;
+  text-shadow: 1px 1px black;
 }
 
-#profilepic {
-  padding: 1%;
-  width: 250px;
-  height: 250px;
+#routineName, #routineGoal {
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 1.5em;
+}
+
+#isPublic {
+  margin: 10px;
+}
+
+.publicOption {
+  display: flex;
+}
+
+.forms {
+  position: absolute;
+  width: 1360px;
+  height: 950px;
+  background: gray;
+  border-radius: 25px;
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 1;
+}
+
+.forms h2{
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 5em;
+}
+
+.forms label {
+  color: yellow;
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 2em;
+  text-shadow: 1px 1px black;
+}
+
+.errorMessage {
+  color: red;
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 1.5em;
+  text-shadow: 1px 1px black;
+}
+
+#activityName, #activityDescription {
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: 1.5em;
 }
 
 /* Buttons */
 
+.createButton {
+  background: yellow;
+  height: auto;
+  width: auto;
+  color: black;
+  font-family: 'Audiowide', cursive;
+  font-size: 1.5em;
+  text-shadow: 1px 1px black;
+}
+
+.formButtons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.formButtons button{
+  height: auto;
+  width: auto;
+  color: white;
+  font-family: 'Audiowide', cursive;
+  font-size: 1.5em;
+  text-shadow: 1px 1px black;
+  margin: 10px;
+}
+
+.submitButton, .editButton {
+  background: green;
+}
+
+.cancelButton, .deleteButton {
+  background: red;
+}
+
 button {
   padding: 1%;
-  border-radius: 5%;
-  /* border: 1px solid black; */
+  border-radius: 25px;
+  height: 50px;
+  width: 100px;
 }
 
 button:hover {
   background: lightskyblue;
+  cursor: pointer;
 }
 
 button:active {
   background: darkgray;
+}
+
+/* Loading */
+
+.loading {
+  position: absolute;
+  width: 100%;
+  height: 88%;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  padding-top: 10%;
+  align-items: center;
+  z-index: 2;
+  color: lightgray;
+  text-shadow: 2px 2px black;
 }

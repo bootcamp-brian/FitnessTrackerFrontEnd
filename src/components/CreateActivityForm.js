@@ -1,25 +1,27 @@
 import { useState } from "react";
-import { createActivity, createRoutine } from "../utils/API";
+import { createActivity } from "../utils/API";
 
-const CreateActivityForm = ({ updated, setUpdated, token }) => {
+const CreateActivityForm = ({ updated, setUpdated, token, setFormEnabled, setLoading }) => {
     const [nameToCreate, setNameToCreate] = useState('');
     const [descriptionToCreate, setDescriptionToCreate] = useState('');
     const [message, setMessage] = useState('');
 
     return <>
-        <h2>Create New Activity</h2>
-        <form className="createActivity" onSubmit={async (event) => {
+        <form className="forms" onSubmit={async (event) => {
             event.preventDefault();
             const response = await createActivity(nameToCreate, descriptionToCreate, token);
 
             if (response.error) {
                 setMessage(response.message);
+                setLoading(false);
             } else {
                 setNameToCreate('');
                 setDescriptionToCreate('');
+                setFormEnabled(false);
                 setUpdated(updated + 1);
             }
         }}>
+            <h2>Create New Activity</h2>
             <section>
                 <label htmlFor="activityName">Name:</label>
                 <br/>
@@ -27,6 +29,7 @@ const CreateActivityForm = ({ updated, setUpdated, token }) => {
                     id="activityName"
                     type="text"
                     placeholder="enter activity name..."
+                    maxLength="30"
                     required
                     value={nameToCreate}
                     onChange={event => setNameToCreate(event.target.value)}
@@ -35,17 +38,25 @@ const CreateActivityForm = ({ updated, setUpdated, token }) => {
             <section>
                 <label htmlFor="activityDescription">Description:</label>
                 <br/>
-                <input
+                <textarea
                     id="activityDescription"
-                    type="text"
+                    rows="5"
+                    cols="25"
                     placeholder="enter activity description..."
+                    maxLength="125"
                     required
                     value={descriptionToCreate}
                     onChange={event => setDescriptionToCreate(event.target.value)}
                 />
             </section>
-            <button type="submit">Submit Activity</button>
-            <p>{message}</p>
+            <section className="formButtons">
+                <button type="submit" className="submitButton">Submit Activity</button>
+                <button type="button" className="cancelButton" onClick={() => {
+                    setFormEnabled(false);
+                    setUpdated(updated + 1);
+                }}>Cancel</button>
+            </section>
+            <p className="errorMessage">{message}</p>
         </form>
     </>
 }

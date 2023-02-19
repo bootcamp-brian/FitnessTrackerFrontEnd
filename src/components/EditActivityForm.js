@@ -1,25 +1,35 @@
 import { useState } from "react";
 import { editActivity } from "../utils/API";
 
-const EditActivityForm = ({ updated, setUpdated, token, activityToEdit, setActivityToEdit }) => {
+const EditActivityForm = ({ updated, setUpdated, token, activityToEdit, setActivityToEdit, setLoading }) => {
     const { name, description, id: activityId } = activityToEdit;
     const [nameToEdit, setNameToEdit] = useState(name);
     const [descriptionToEdit, setDescriptionToEdit] = useState(description);
+    const [message, setMessage] = useState('');
 
     return <>
-        <h2>Edit Activity</h2>
-        <form className="editActivity" onSubmit={async (event) => {
+        <form className="forms" onSubmit={async (event) => {
             event.preventDefault();
             
             if (nameToEdit === name) {
                 await editActivity(null, descriptionToEdit, token, activityId);
+                setActivityToEdit(null);
+                setUpdated(updated + 1);
             } else {
-                await editActivity(nameToEdit, descriptionToEdit, token, activityId);
-            }
-            
-            setActivityToEdit(null);
-            setUpdated(updated + 1);
+                const response = await editActivity(nameToEdit, descriptionToEdit, token, activityId);
+
+                if (response.error) {
+                    setMessage(response.message);
+                    setLoading(false);
+                } else {
+                    setNameToEdit('');
+                    setDescriptionToEdit('');
+                    setActivityToEdit(null);
+                    setUpdated(updated + 1);
+                }
+            }    
         }}>
+            <h2>Edit Activity</h2>
             <section>
                 <label htmlFor="activityName">Name:</label>
                 <br/>
@@ -27,6 +37,7 @@ const EditActivityForm = ({ updated, setUpdated, token, activityToEdit, setActiv
                     id="activityName"
                     type="text"
                     placeholder="enter activity name..."
+                    maxLength="30"
                     required
                     value={nameToEdit}
                     onChange={event => setNameToEdit(event.target.value)}
@@ -35,16 +46,25 @@ const EditActivityForm = ({ updated, setUpdated, token, activityToEdit, setActiv
             <section>
                 <label htmlFor="activityDescription">Description:</label>
                 <br/>
-                <input
+                <textarea
                     id="activityDescription"
-                    type="text"
+                    rows="5"
+                    cols="25"
                     placeholder="enter activity description..."
+                    maxLength="125"
                     required
                     value={descriptionToEdit}
                     onChange={event => setDescriptionToEdit(event.target.value)}
                 />
             </section>
-            <button type="submit">Submit Edits</button>
+            <section className="formButtons">
+                <button type="submit" className="submitButton">Submit Activity</button>
+                <button type="button" className="cancelButton" onClick={() => {
+                    setActivityToEdit(null);
+                    setUpdated(updated + 1);
+                }}>Cancel</button>
+            </section>
+            <p className="errorMessage">{message}</p>
         </form>
     </>
 }

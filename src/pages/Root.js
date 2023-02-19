@@ -47,10 +47,10 @@ export default function Root() {
                         
                     </ul>
                 </nav>
-                <section className="logo">
-                    <h1>Fitness Trac.kr</h1>
-                </section>
             </header>
+            <section className="logo">
+                <h1>FITNESS TRACK.R</h1>
+            </section>
             <Outlet context={[token, setToken]}/>
         </> 
     );
